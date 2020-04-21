@@ -1,5 +1,5 @@
 homepage: "https://www.channeladvisor.com/"
 documentation: "https://github.com/channeladvisor/channeladvisor-wtb-gtm-template/blob/master/README.md"
 versions:
-    - changeNotes: "Initial Version"
-        sha: 0
+  - sha: bacc91ef43a40f8b8410610d305033642b09bcdf
+    changeNotes: Initial release.
