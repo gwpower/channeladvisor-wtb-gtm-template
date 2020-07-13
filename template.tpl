@@ -150,7 +150,7 @@ switch(data.EventAction)
           const sendPixel = require('sendPixel'); //sends a get request
           const encodeUriComponent = require('encodeUriComponent');
          
-          var url = 'https://strack.where-to-buy.co/api/v1/gtm/recordSale/' + requestInformation + "&s.at="+accessToken;
+          var url = 'https://strack.where-to-buy.co/api/v1/gtm/recordSale/' + encodeUriComponent(requestInformation + "&s.at="+accessToken);
           log("Sending GET request to - " + url); 
           sendPixel(url);
     
