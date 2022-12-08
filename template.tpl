@@ -92,53 +92,55 @@ switch(data.EventAction)
     	var accessToken = data.AccessToken;
     	var validationErrors = "";
     	const getCookieValues = require("getCookieValues");
-      	var clickref = getCookieValues("wtbclickref");
-    	if(clickref != "") 
-        {
+      var clickref = getCookieValues("wtbclickref");
+    	
+      if(clickref != "") {
           log("Clickref found: " + clickref);
-        }
-    	else{
+      } else {
           validationErrors += "2,";
           log("Unable to find 'wtbclickref' cookie.");
-        }
+      }
     
-        const copyDL = require('copyFromDataLayer');
-        const orderid = copyDL("orderid");
+      const copyDL = require('copyFromDataLayer');
+      const orderid = copyDL("orderid");
+
+      const encodeUriComponent = require('encodeUriComponent');
         
-    	
-    	var requestInformation = "?s.cr=" + clickref+ "&s.oi=" + orderid;
+    	var requestInformation = "?s.cr=" + clickref+ "&s.oi=" + encodeUriComponent(orderid);
     
     	//--- Set Tags Start ---
-        const tags = copyDL("tags");
-    	if(tags != null && tags.length != 0)
+      const tags = copyDL("tags");
+    	
+      if(tags != null && tags.length != 0)
+      {
+        for(var i = 0; i < tags.length; i++)
         {
-           for(var i = 0; i < tags.length; i++)
-           {
-             requestInformation += "&s.tags["+i+"]=" + tags[i];
-           }
+          requestInformation += "&s.tags["+i+"]=" + encodeUriComponent(tags[i]);
         }
+      }
    	 	//--- Set Tags End ---
     	
-        //--- Set Products Start ---
-        const productdata = copyDL("products");
-        log('Products =', productdata);
-    	if(productdata != null && productdata.length != 0)
+      //--- Set Products Start ---
+      const productdata = copyDL("products");
+      log('Products =', productdata);
+    	
+      if(productdata != null && productdata.length != 0)
         {        
             for(var i = 0; i < productdata.length; i++)
             {
-              requestInformation +=  "&s.p["+ i +"].s=" + productdata[i].sku;
-              requestInformation +=  "&s.p["+ i +"].up=" + productdata[i].price;
-              requestInformation +=  "&s.p["+ i +"].q=" + productdata[i].quantity;
-              requestInformation +=  "&s.p["+ i +"].BName=" + productdata[i].brandname;
-              //requestInformation +=  "&s.p["+ i +"].PName=" + productdata[i].name;
+              requestInformation +=  "&s.p["+ i +"].s=" + encodeUriComponent(productdata[i].sku);
+              requestInformation +=  "&s.p["+ i +"].up=" + encodeUriComponent(productdata[i].price);
+              requestInformation +=  "&s.p["+ i +"].q=" + encodeUriComponent(productdata[i].quantity);
+              requestInformation +=  "&s.p["+ i +"].BName=" + encodeUriComponent(productdata[i].brandname);
+              //requestInformation +=  "&s.p["+ i +"].PName=" + encodeUriComponent(productdata[i].name);
               if(productdata[i].ean != null && productdata[i].ean.length != 0)
-                requestInformation +=  "&s.p["+ i +"].e=" + productdata[i].ean;
+                requestInformation +=  "&s.p["+ i +"].e=" + encodeUriComponent(productdata[i].ean);
               if(productdata[i].upc != null && productdata[i].upc.length != 0)
-                requestInformation +=  "&s.p["+ i +"].u=" + productdata[i].upc;
+                requestInformation +=  "&s.p["+ i +"].u=" + encodeUriComponent(productdata[i].upc);
               if(productdata[i].gtin != null && productdata[i].gtin.length != 0)
-                requestInformation +=  "&s.p["+ i +"].g=" + productdata[i].gtin;
+                requestInformation +=  "&s.p["+ i +"].g=" + encodeUriComponent(productdata[i].gtin);
               if(productdata[i].mpn != null && productdata[i].mpn.length != 0)
-                requestInformation +=  "&s.p["+ i +"].m=" + productdata[i].mpn;
+                requestInformation +=  "&s.p["+ i +"].m=" + encodeUriComponent(productdata[i].mpn);
             }
           }
           else{
@@ -148,9 +150,8 @@ switch(data.EventAction)
        	  //--- Set Products End ---
           
           const sendPixel = require('sendPixel'); //sends a get request
-          const encodeUriComponent = require('encodeUriComponent');
          
-          var url = 'https://strack.where-to-buy.co/api/v1/gtm/recordSale/' + encodeUriComponent(requestInformation + "&s.at="+accessToken);
+          var url = 'https://strack.where-to-buy.co/api/v1/gtm/recordSale/' + requestInformation + "&s.at="+accessToken;
           log("Sending GET request to - " + url); 
           sendPixel(url);
     
