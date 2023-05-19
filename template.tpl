@@ -77,6 +77,7 @@ switch(data.EventAction)
         log("Setting cookie called 'wtbclickref' with value '"+wtbClick+"'");
         const options = {
           'max-age': 2592000 * 1000,
+          'path', '/',
         };
         setCookie("wtbclickref", wtbClick, options);
       }
