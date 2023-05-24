@@ -2,7 +2,7 @@ homepage: "https://www.channeladvisor.com/"
 documentation: "https://github.com/channeladvisor/channeladvisor-wtb-gtm-template/blob/master/README.md"
 versions:
   # Latest Version
-  - sha: 8f7b857ee7c514c22be1d493c7028e74602438ac
+  - sha: 787f58ede89779f625cae2dc774c296ebd85c1f5
     changeNotes: add Path to cookie save
   # Older Versions
   - sha: 2138c187be926fe3e85ceec35ca105888fae554d
